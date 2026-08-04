@@ -1,0 +1,7 @@
+data/raw/*.csv
+   data/processed/*.csv
+   *.pbix.bak
+   .ipynb_checkpoints/
+   __pycache__/
+   .venv/
+   .env
