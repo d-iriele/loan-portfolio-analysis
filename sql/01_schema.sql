@@ -151,3 +151,7 @@ CREATE TABLE loans_raw (
     "settlement_percentage" NUMERIC,
     "settlement_term" NUMERIC
 );
+
+-- Note: The derived table "loans_clean" is created in 02_cleaning.sql,
+-- not here. Its schema is generated automatically via CREATE TABLE AS
+-- SELECT, filtering and transforming loans_raw for analysis.

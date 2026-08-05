@@ -51,3 +51,7 @@ SELECT
     MAX(issue_date) AS latest_loan,
     COUNT(DISTINCT loan_status) AS distinct_statuses
 FROM loans_clean;
+
+SELECT COUNT(*) 
+FROM information_schema.columns 
+WHERE table_name = 'loans_raw';

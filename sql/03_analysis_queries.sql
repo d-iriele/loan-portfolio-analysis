@@ -176,3 +176,121 @@ WHERE
     AND annual_inc IS NOT NULL;
 
     SELECT COUNT(*) FROM loans_clean;
+
+
+-- ============================================================
+-- BUSINESS QUESTION 4: Which segments provide the poorest
+-- risk-adjusted returns? (Interest Income vs. Realized Loss, by Grade)
+--
+-- Note: An earlier version of this query used out_prncp (outstanding
+-- principal) as the loss measure, but Lending Club zeroes out
+-- out_prncp once a loan is charged off making it unreliable for
+-- exactly the loans that matter most. This version instead calculates
+-- loss as funded_amnt - total_rec_prncp (amount lent minus amount
+-- actually recovered), which correctly captures realized loss
+-- regardless of loan outcome.
+-- ============================================================
+
+SELECT
+    grade,
+    COUNT(*) AS total_loans,
+    ROUND(SUM(total_rec_int), 2) AS total_interest_income,
+    ROUND(SUM(funded_amnt - total_rec_prncp), 2) AS total_realized_loss,
+    ROUND(SUM(funded_amnt), 2) AS total_funded,
+    ROUND(
+        (SUM(total_rec_int) - SUM(funded_amnt - total_rec_prncp)) / SUM(funded_amnt) * 100,
+        2
+    ) AS risk_adjusted_return_pct
+FROM loans_clean
+GROUP BY grade
+ORDER BY risk_adjusted_return_pct ASC;
+
+-- Finding: Risk-adjusted return is negative for every grade except A
+-- (1.77%). Returns decline steeply and consistently as risk increases:
+-- B (-1.72%), C (-7.62%), D (-13.05%), E (-17.22%), F (-23.21%), and
+-- G (-26.99%). This indicates that for grades B through G, the interest
+-- charged did not come close to covering realized credit losses — the
+-- portfolio was effectively losing money on the majority of its lending
+-- activity when losses are properly accounted for. This directly
+-- contradicts the assumption that higher interest rates on riskier
+-- grades adequately compensate for their higher default risk; in this
+-- portfolio, pricing was not steep enough to offset losses beyond
+-- grade A.
+--
+-- Note: this is a TOTAL return over each loan's full life (3-5 years),
+-- not an annualized rate so it should not be read as a yearly yield.
+
+
+-- ============================================================
+-- BUSINESS QUESTION 5: What is the potential financial impact of
+-- targeted underwriting changes? (Scenario: Exclude Grades F & G)
+-- ============================================================
+
+SELECT
+    CASE
+        WHEN grade IN ('F', 'G') THEN 'Excluded (F & G)'
+        ELSE 'Retained Portfolio'
+    END AS scenario_segment,
+    COUNT(*) AS total_loans,
+    ROUND(SUM(funded_amnt), 2) AS total_funded,
+    ROUND(SUM(total_rec_int), 2) AS total_interest_income,
+    ROUND(SUM(funded_amnt - total_rec_prncp), 2) AS total_realized_loss,
+    ROUND(
+        (SUM(total_rec_int) - SUM(funded_amnt - total_rec_prncp)),
+        2
+    ) AS net_dollar_return
+FROM loans_clean
+GROUP BY scenario_segment;
+
+-- Finding: Excluding grades F and G would have avoided $73.8M in net
+-- losses (15,616 loans, ~3% of total loan count, ~4% of funded volume).
+-- However, the remaining "retained" portfolio (grades A-E) still shows
+-- a net dollar return of -$432.8M — consistent with Question 4's finding
+-- that only grade A was individually profitable under this measure.
+-- This indicates that excluding F/G alone is an incomplete fix: the
+-- larger driver of portfolio-wide losses is grades B through E, which
+-- represent far greater loan volume than F/G despite their comparatively
+-- lower individual loss rates. A complete underwriting response should
+-- prioritize re-pricing or tightening grades B-E, not just eliminating
+-- the smaller F/G segment.
+--
+-- Note: figures represent total realized return over each loan's full
+-- life (up to 5 years), not an annualized figure, and total_rec_int
+-- reflects only interest collected to date — for loans still very early
+-- in repayment at data capture, this may understate eventual income.
+
+-- Supplementary: what average interest rate would grade G have needed
+-- to break even (net_dollar_return = 0), holding loss constant?
+SELECT
+    grade,
+    ROUND(SUM(funded_amnt - total_rec_prncp), 2) AS total_loss,
+    ROUND(SUM(funded_amnt), 2) AS total_funded,
+    ROUND(AVG(int_rate), 2) AS actual_avg_rate,
+    ROUND(
+        (SUM(funded_amnt - total_rec_prncp) / SUM(funded_amnt)) * 100,
+        2
+    ) AS breakeven_rate_needed_pct
+FROM loans_clean
+WHERE grade IN ('F', 'G')
+GROUP BY grade;
+
+-- Finding: To break even on realized losses alone, grade F would have
+-- needed an average interest rate of 45.20% (vs. actual 27.28%), and
+-- grade G would have needed 48.40% (vs. actual 29.90%) — increases of
+-- roughly 18 and 19 percentage points respectively. These breakeven
+-- rates are almost certainly impractical: they exceed typical usury
+-- limits in most US states and would likely price out nearly all
+-- borrowers who'd accept them, defeating the purpose of the loan
+-- product. This reinforces that re-pricing is not a realistic fix for
+-- grades F and G specifically — unlike grades B-E, where smaller rate
+-- adjustments might plausibly close the gap, F and G's risk profile is
+-- fundamentally too high for interest income to viably cover expected
+-- losses. Exclusion (tightening approval criteria) is the more credible
+-- lever for these two grades, while re-pricing remains a viable option
+-- for the higher-volume B-E segments.
+--
+-- Note: this is a simplified breakeven estimate that treats loss as a
+-- flat amount and does not account for compounding, time value of
+-- money, or the fact that raising rates likely changes borrower
+-- behavior and default rates themselves (a higher rate could itself
+-- increase default risk — a limitation of this static estimate).
