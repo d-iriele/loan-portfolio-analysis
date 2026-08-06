@@ -1,0 +1,37 @@
+date_key,year,quarter,month_number,month_name,month_short
+2016-01-01,2016,1,1,January  ,Jan
+2016-02-01,2016,1,2,February ,Feb
+2016-03-01,2016,1,3,March    ,Mar
+2016-04-01,2016,2,4,April    ,Apr
+2016-05-01,2016,2,5,May      ,May
+2016-06-01,2016,2,6,June     ,Jun
+2016-07-01,2016,3,7,July     ,Jul
+2016-08-01,2016,3,8,August   ,Aug
+2016-09-01,2016,3,9,September,Sep
+2016-10-01,2016,4,10,October  ,Oct
+2016-11-01,2016,4,11,November ,Nov
+2016-12-01,2016,4,12,December ,Dec
+2017-01-01,2017,1,1,January  ,Jan
+2017-02-01,2017,1,2,February ,Feb
+2017-03-01,2017,1,3,March    ,Mar
+2017-04-01,2017,2,4,April    ,Apr
+2017-05-01,2017,2,5,May      ,May
+2017-06-01,2017,2,6,June     ,Jun
+2017-07-01,2017,3,7,July     ,Jul
+2017-08-01,2017,3,8,August   ,Aug
+2017-09-01,2017,3,9,September,Sep
+2017-10-01,2017,4,10,October  ,Oct
+2017-11-01,2017,4,11,November ,Nov
+2017-12-01,2017,4,12,December ,Dec
+2018-01-01,2018,1,1,January  ,Jan
+2018-02-01,2018,1,2,February ,Feb
+2018-03-01,2018,1,3,March    ,Mar
+2018-04-01,2018,2,4,April    ,Apr
+2018-05-01,2018,2,5,May      ,May
+2018-06-01,2018,2,6,June     ,Jun
+2018-07-01,2018,3,7,July     ,Jul
+2018-08-01,2018,3,8,August   ,Aug
+2018-09-01,2018,3,9,September,Sep
+2018-10-01,2018,4,10,October  ,Oct
+2018-11-01,2018,4,11,November ,Nov
+2018-12-01,2018,4,12,December ,Dec

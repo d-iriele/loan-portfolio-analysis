@@ -31,9 +31,9 @@ Tools and their role in this project
 SQL (PostgreSQL): Data cleaning, transformation, and  the core analytical queries answering the business questions above
 Python (pandas, scipy): Statistical validation of SQL findings (e.g. significance testing) — not a duplicate EDA pass
 Excel: Spot-check validation of key aggregates against SQL output
-Power BI: Executive-facing interactive dashboard for stakeholder communication
+Tableau Public: Executive-facing interactive dashboard for stakeholder communication
 
-Data flows one direction through this pipeline: raw CSV → SQL → Python validation → Power BI. Each stage's output is what the next stage consumes.
+Data flows one direction through this pipeline: raw CSV → SQL → Python validation → Tableau. Each stage's output is what the next stage consumes.
 
 Project Structure
 loan-portfolio-analysis/
@@ -45,7 +45,7 @@ loan-portfolio-analysis/
 ├── sql/                  # schema, cleaning, and analysis queries
 ├── notebooks/            # exploratory validation notebooks
 ├── excel/                # validation workbook
-├── powerbi/              # .pbix dashboard file
+├── tableau public/              # .pbix dashboard file
 ├── docs/                 # problem statement, data dictionary, findings write-up
 └── images/               # dashboard screenshots for this README
 Data
@@ -74,9 +74,13 @@ Findings
 
 Coming soon — populated once the analysis phase (Milestone 4) is complete.
 
-Dashboard
+##Dashboard
 
-Coming soon — screenshots and a walkthrough will be added once the Power BI build (Milestone 6) is complete.
+Explore the live, interactive dashboard on Tableau Public: **[Loan Portfolio Risk & Profitability Analysis](https://public.tableau.com/app/profile/dennis.iriele/viz/LoanPortfolioRiskProfitabilityAnalysis/Dashboard1?publish=yes)**
+
+   ![Dashboard overview showing default rate by grade, risk-adjusted return by grade, and default rate by loan purpose](images/dashboard_screenshots/dashboard_overview.png)
+
+   The dashboard includes an interactive filter — clicking any bar in the "Default Rate by Grade" chart filters the other two charts to that grade, letting you explore how default risk and risk-adjusted return move together across segments.
 
 Key Recommendations
 
