@@ -1,8 +1,8 @@
 -- ============================================================
--- BI Data Model — Milestone 5
+-- BI Data Model
 --
 -- Restructures loans_clean into a star schema optimised for
--- Power BI: a fact table (fact_loans) plus supporting dimension
+-- Tableau: a fact table (fact_loans) plus supporting dimension
 -- tables (dim_date, dim_grade). This is a separate step from
 -- 02_cleaning.sql (data cleaning) and 03_analysis_queries.sql
 -- (exploratory SQL analysis) — this file exists specifically to
@@ -11,7 +11,7 @@
 
 -- ============================================================
 -- Build dim_date: a calendar dimension covering the full range
--- of issue dates in loans_clean, for use in Power BI's date-based
+-- of issue dates in loans_clean, for use in Tableau date-based
 -- filtering, trend charts, and vintage analysis views.
 -- ============================================================
 
@@ -37,7 +37,7 @@ FROM dim_date;
 -- ============================================================
 -- Build dim_grade: a small dimension table listing each unique
 -- loan grade (A-G). Provides a clean, standalone place to attach
--- descriptive grade metadata in Power BI (e.g. filtering, slicers,
+-- descriptive grade metadata in Tableau (e.g. filtering, slicers,
 -- or a future risk-tier grouping) without repeating that logic
 -- across every visual.
 -- ============================================================
@@ -46,14 +46,14 @@ CREATE TABLE dim_grade AS
 SELECT DISTINCT grade FROM loans_clean ORDER BY grade;
 
 -- ============================================================
--- Build fact_loans: the core fact table for the Power BI model.
+-- Build fact_loans: the core fact table for the Tableau model.
 -- Derived from loans_clean, with two additions purpose-built for
 -- dashboard use:
 --   - realized_loss: pre-calculated (funded_amnt - total_rec_prncp),
 --     using the corrected loss logic from Business Question 4,
---     so it's ready to use directly as a Power BI measure.
+--     so it's ready to use directly as a Tableau measure.
 --   - is_defaulted: a 1/0 flag version of loan outcome, letting
---     Power BI calculate default rate as a simple average.
+--     Tableau calculate default rate as a simple average.
 -- loans_clean itself is left untouched, since it's the record of
 -- the SQL analysis phase (Milestone 4) — fact_loans exists
 -- specifically to feed the dashboard.
