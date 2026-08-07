@@ -1,3 +1,14 @@
+-- ============================================================
+-- Data Cleaning — Milestone 3
+--
+-- Builds loans_clean from loans_raw: filters to loans issued
+-- 2016-2018 with a resolved outcome (Fully Paid, Charged Off,
+-- or Default), converts issue_d to a real date, and removes
+-- rows missing core risk metrics (dti, annual_inc). Scope
+-- decisions here directly implement docs/00_problem_statement.md.
+-- ============================================================
+
+-- Check for missing values in key analysis columns before cleaning
 SELECT
     COUNT(*) AS total_rows,
     COUNT(*) - COUNT(loan_status) AS missing_loan_status,
@@ -9,8 +20,11 @@ FROM loans_raw;
 
 SELECT issue_d FROM loans_raw LIMIT 5;
 
+-- Confirm issue_d's text format (Mon-YYYY) is consistent across
+-- the dataset before converting it to a real date type
 SELECT DISTINCT issue_d FROM loans_raw ORDER BY issue_d LIMIT 10;
 
+-- Test the TO_DATE conversion before using it in the final table
 SELECT
     issue_d,
     TO_DATE(issue_d, 'Mon-YYYY') AS issue_date_parsed
@@ -18,6 +32,8 @@ FROM loans_raw
 ORDER BY issue_d
 LIMIT 10;
 
+-- Build the cleaned, scoped table. loans_raw is left untouched;
+-- loans_clean is fully rebuildable from this query at any time.
 CREATE TABLE loans_clean AS
 SELECT
     id,
@@ -36,7 +52,11 @@ SELECT
     loan_status,
     purpose,
     dti,
-    addr_state
+    addr_state,
+    total_pymnt,
+    total_rec_int,
+    total_rec_prncp,
+    out_prncp
 FROM loans_raw
 WHERE
     loan_status IN ('Fully Paid', 'Charged Off', 'Default')
@@ -44,7 +64,8 @@ WHERE
     AND dti IS NOT NULL
     AND annual_inc IS NOT NULL;
 
-    SELECT COUNT(*) FROM loans_clean;
+-- Verify the result
+SELECT COUNT(*) FROM loans_clean;
 
 SELECT
     MIN(issue_date) AS earliest_loan,
