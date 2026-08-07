@@ -1,5 +1,5 @@
 -- ============================================================
--- Data Cleaning — Milestone 3
+-- Data Cleaning
 --
 -- Builds loans_clean from loans_raw: filters to loans issued
 -- 2016-2018 with a resolved outcome (Fully Paid, Charged Off,

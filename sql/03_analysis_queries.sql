@@ -19,7 +19,7 @@ GROUP BY grade
 ORDER BY default_rate_pct DESC;
 
 -- Finding: Default rate rises sharply and consistently from grade A (6.83%)
--- to grade G (53.56%) — nearly an 8x difference. This confirms Lending
+-- to grade G (53.56%); nearly an 8x difference. This confirms Lending
 -- Club's assigned grade is a strong, reliable risk signal on its own.
 
 -- Default rate by loan purpose
@@ -35,7 +35,7 @@ GROUP BY purpose
 ORDER BY default_rate_pct DESC;
 
 -- Finding: Small business loans show the highest default rate among
--- meaningfully-sized segments (34.53%, n=5,581) — nearly double the rate
+-- meaningfully-sized segments (34.53%, n=5,581); nearly double the rate
 -- for car loans (16.49%). Wedding (33.33%) is excluded from serious
 -- consideration due to an extremely small sample (n=3).
 
@@ -52,7 +52,7 @@ GROUP BY home_ownership
 ORDER BY default_rate_pct DESC;
 
 -- Finding: Renters show the highest default rate (27.17%) compared to
--- homeowners with a mortgage (18.67%) — nearly a 9-point gap, suggesting
+-- homeowners with a mortgage (18.67%); close to a 9-point gap, suggesting
 -- housing stability is meaningfully correlated with repayment risk.
 -- ANY/NONE categories are ignored due to negligible sample sizes.
 
@@ -131,11 +131,11 @@ ORDER BY issue_year;
 -- loans with a RESOLVED outcome (Fully Paid, Charged Off, or Default).
 -- 2018 loans have had far less time to reach a resolved outcome than
 -- 2016 loans, so many 2018 loans that will eventually default are still
--- marked "Current" and were excluded from this table entirely — both
+-- marked "Current" and were excluded from this table entirely - both
 -- shrinking the 2018 sample and understating its true default rate.
 -- DTI and interest rate stayed roughly flat across all three years
 -- (~18.5-19% DTI, ~13-14% interest), suggesting underwriting standards
--- and pricing were largely stable — the volume/default pattern above
+-- and pricing were largely stable and the volume/default pattern above
 -- is a data artifact, not evidence of loosening or tightening standards.
 
 
@@ -209,7 +209,7 @@ ORDER BY risk_adjusted_return_pct ASC;
 -- (1.77%). Returns decline steeply and consistently as risk increases:
 -- B (-1.72%), C (-7.62%), D (-13.05%), E (-17.22%), F (-23.21%), and
 -- G (-26.99%). This indicates that for grades B through G, the interest
--- charged did not come close to covering realized credit losses — the
+-- charged did not come close to covering realized credit losses and the
 -- portfolio was effectively losing money on the majority of its lending
 -- activity when losses are properly accounted for. This directly
 -- contradicts the assumption that higher interest rates on riskier
@@ -282,7 +282,7 @@ GROUP BY grade;
 -- limits in most US states and would likely price out nearly all
 -- borrowers who'd accept them, defeating the purpose of the loan
 -- product. This reinforces that re-pricing is not a realistic fix for
--- grades F and G specifically — unlike grades B-E, where smaller rate
+-- grades F and G specifically and unlike grades B-E, where smaller rate
 -- adjustments might plausibly close the gap, F and G's risk profile is
 -- fundamentally too high for interest income to viably cover expected
 -- losses. Exclusion (tightening approval criteria) is the more credible
